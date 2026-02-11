@@ -1,21 +1,26 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { NotesDispatchContext } from "./NoteContext";
 
-export default function NoteForm({ onAdd }) {
+export default function NoteForm() {
   const [text, setText] = useState("");
+  const dispatch = useContext(NotesDispatchContext);
 
-  function handleClick(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    onAdd(text);   // ✅ BUKAN onAddNote
+    dispatch({
+      type: "ADD_NOTE",
+      text,
+    });
     setText("");
   }
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <button onClick={handleClick}>Add</button>
+      <button>Add</button>
     </form>
   );
 }
